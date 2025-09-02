@@ -41,7 +41,9 @@ function TaskItem({ task, toggleTask, deleteTask, editTask }) {
               textAlign: "left",
             }}
           >
-            {task.text}
+            {task.text} {" "}
+            <small>({task.priority})</small> {" "}
+            {task.dueDate && <small>📅 {task.dueDate}</small>}
           </span>
           <button onClick={() => setIsEditing(true)}>✏️</button>
           <button onClick={() => deleteTask(task.id)}>❌</button>

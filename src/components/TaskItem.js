@@ -19,6 +19,7 @@ function TaskItem({ task, toggleTask, deleteTask, editTask }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        background: task.completed ? "#e0ffe0" : "#fff",
       }}
     >
       {isEditing ? (
@@ -43,7 +44,16 @@ function TaskItem({ task, toggleTask, deleteTask, editTask }) {
           >
             {task.text} {" "}
             <small>({task.priority})</small> {" "}
-            {task.dueDate && <small>📅 {task.dueDate}</small>}
+            {task.dueDate && <small>📅 {task.dueDate}</small>} {" "}
+            <span style={{
+              background: "#ddd",
+              borderRadius: "5px",
+              padding: "2px 6px",
+              marginLeft: "10px",
+              fontSize: "0.8em"
+            }}>
+              {task.category}
+            </span>
           </span>
           <button onClick={() => setIsEditing(true)}>✏️</button>
           <button onClick={() => deleteTask(task.id)}>❌</button>

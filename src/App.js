@@ -6,22 +6,27 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [darkMode, setDarkMode] = useState(false);
 
-  // Load tasks from localStorage
+  // Load tasks + dark mode from localStorage
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
     setTasks(storedTasks);
+
+    const storedDarkMode = JSON.parse(localStorage.getItem("darkMode")) || false;
+    setDarkMode(storedDarkMode);
   }, []);
 
-  // Save tasks to localStorage
+  // Save tasks + dark mode to localStorage
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [tasks, darkMode]);
 
-  const addTask = (task, priority, dueDate) => {
+  const addTask = (task, priority, dueDate, category) => {
     setTasks([
       ...tasks,
-      { id: Date.now(), text: task, completed: false, priority, dueDate },
+      { id: Date.now(), text: task, completed: false, priority, dueDate, category },
     ]);
   };
 
@@ -45,7 +50,7 @@ function App() {
     setTasks(tasks.filter((task) => !task.completed));
   };
 
-  // Filter & Search
+  // Filter + Search
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.text.toLowerCase().includes(search.toLowerCase());
     if (filter === "completed") return task.completed && matchesSearch;
@@ -54,8 +59,33 @@ function App() {
   });
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
+    <div
+      style={{
+        maxWidth: "700px",
+        margin: "auto",
+        textAlign: "center",
+        padding: "20px",
+        background: darkMode ? "#222" : "#f9f9f9",
+        color: darkMode ? "#fff" : "#000",
+        minHeight: "100vh",
+      }}
+    >
       <h1>Task Manager ✅</h1>
+
+      {/* Dark Mode Toggle */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        style={{
+          marginBottom: "20px",
+          padding: "8px 15px",
+          background: darkMode ? "#444" : "#ddd",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+      </button>
 
       <TaskForm addTask={addTask} />
 
@@ -65,7 +95,14 @@ function App() {
         placeholder="Search tasks..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        style={{ padding: "8px", margin: "10px 0", width: "70%" }}
+        style={{
+          padding: "8px",
+          margin: "10px 0",
+          width: "70%",
+          background: darkMode ? "#333" : "#fff",
+          color: darkMode ? "#fff" : "#000",
+          border: "1px solid #ccc",
+        }}
       />
 
       {/* Filters */}
